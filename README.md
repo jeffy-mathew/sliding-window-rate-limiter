@@ -27,3 +27,20 @@ From project root directory run:
 ```sh
 $ go test -cover ./...
 ```
+
+## Running with Docker & docker-compose
+
+### Prerequisites
+1. [docker](https://docs.docker.com/engine/install/)
+2. [docker-compose](https://docs.docker.com/compose/install/)
+
+### Instructions
+
+Run
+```sh
+$ docker-compose up
+```
+
+This will build docker and run application in a docker container.
+Port mapping is done from `8000:8000`
+In case need to change the port on host, change the first argument to the required port, like `9000:8000`
