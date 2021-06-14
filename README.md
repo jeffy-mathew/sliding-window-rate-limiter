@@ -12,6 +12,12 @@ $ go build -o window-rate-counter cmd/main.go
 $ ./window-rate-counter
 ```
 
+Alternatively, you can run the application after running tests with a single command 
+if [GNU Make](https://www.gnu.org/software/make/) is installed
+```sh
+$ make all
+```
+
 The route is configured to `/` of the server
 
 ```sh
