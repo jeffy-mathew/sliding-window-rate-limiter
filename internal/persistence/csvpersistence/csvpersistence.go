@@ -36,13 +36,16 @@ func NewPersistence() (*CSVPersistence, error) {
 // Dump dumps the entries passed as a csv to the file
 func (p *CSVPersistence) Dump(entries []models.Entry) error {
 	defer p.file.Close()
-	p.file.Truncate(0)
+	err := p.file.Truncate(0)
+	if err != nil {
+		log.Println("error while truncating file", err)
+	}
 	w := csv.NewWriter(p.file)
 	var records [][]string
 	for _, entry := range entries {
 		records = append(records, []string{fmt.Sprintf("%d", entry.EpochTimestamp), fmt.Sprintf("%d", entry.Hits)})
 	}
-	err := w.WriteAll(records)
+	err = w.WriteAll(records)
 	if err != nil {
 		log.Println("error occurred while dumping data to file", err)
 	}

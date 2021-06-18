@@ -43,6 +43,7 @@ func (c *Counter) Hit() int64 {
 	now := time.Now().Unix()
 	sixtySecondsAgo := now - 60
 	c.mu.Lock()
+	defer c.mu.Unlock()
 	var diff int64
 	windowLength := len(c.window)
 	discardCount := 0
@@ -59,7 +60,6 @@ func (c *Counter) Hit() int64 {
 	}
 	diff++
 	c.hitCounter = c.hitCounter + diff
-	c.mu.Unlock()
 	return c.hitCounter
 }
 

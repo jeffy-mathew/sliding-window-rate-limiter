@@ -106,7 +106,8 @@ func TestCounter_Dump(t *testing.T) {
 		mockPersistence.EXPECT().Dump([]models.Entry{})
 		counterService, err := NewCounterService(mockPersistence)
 		assert.NoError(t, err)
-		counterService.Dump()
+		err = counterService.Dump()
+		assert.NoError(t, err)
 	})
 	t.Run("should call persistence dump with loaded entries immediately", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
@@ -118,6 +119,7 @@ func TestCounter_Dump(t *testing.T) {
 		mockPersistence.EXPECT().Dump(mockEntries)
 		counterService, err := NewCounterService(mockPersistence)
 		assert.NoError(t, err)
-		counterService.Dump()
+		err = counterService.Dump()
+		assert.NoError(t, err)
 	})
 }

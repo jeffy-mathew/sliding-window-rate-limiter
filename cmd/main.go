@@ -22,7 +22,7 @@ const (
 // serve handles the logic of running  server in a goroutine and waiting for signal to gracefully stop the server
 // on ctx.Done signal a request to shutdown the server is sent, so that no new requests will be served
 // after that the window is dumped to the file
-func serve(ctx context.Context, counterApp *app.App) (err error) {
+func serve(ctx context.Context, counterApp *app.App) {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.HandlerFunc(counterApp.Hit))
 	port := os.Getenv(AppPortEnv)
@@ -31,7 +31,7 @@ func serve(ctx context.Context, counterApp *app.App) (err error) {
 	}
 	srv := &http.Server{Addr: port, Handler: mux}
 	go func() {
-		if err = srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen:%s\n", err)
 		}
 	}()
@@ -43,22 +43,17 @@ func serve(ctx context.Context, counterApp *app.App) (err error) {
 	log.Printf("gracefull shutdown request received")
 
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer func() {
-		cancel()
-	}()
+	defer cancel()
 
-	if err = srv.Shutdown(ctxShutDown); err != nil {
+	if err := srv.Shutdown(ctxShutDown); err != nil {
 		log.Fatalf("server Shutdown Failed:%s", err.Error())
 	}
 	log.Println("application stopped accepting requests, dumping window")
 
-	err = counterApp.Dump()
-	if err != nil {
+	if err := counterApp.Dump(); err != nil {
 		log.Fatalln("dumping window failed", err.Error())
 	}
 	log.Println("dumping window complete. app exiting!!")
-
-	return
 }
 
 // main initiates new app and calls serve to start the server
@@ -95,8 +90,5 @@ func main() {
 		log.Printf("system call received")
 		cancel()
 	}()
-
-	if err := serve(ctx, counterApp); err != nil {
-		log.Printf("failed to serve:+%v\n", err)
-	}
+	serve(ctx, counterApp)
 }

@@ -16,7 +16,8 @@ func TestApp_Dump(t *testing.T) {
 		mockService := services_mock.NewMockCounterServiceInterface(ctrl)
 		mockService.EXPECT().Dump()
 		counterApp := NewApp(mockService)
-		counterApp.Dump()
+		err := counterApp.Dump()
+		assert.NoError(t, err)
 	})
 }
 
