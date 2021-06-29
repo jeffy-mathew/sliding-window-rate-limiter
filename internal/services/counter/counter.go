@@ -2,68 +2,87 @@ package counter
 
 import (
 	"request-window-counter/internal/models"
-	"request-window-counter/internal/persistence"
 	"sync"
 	"time"
 )
 
 // Counter service handles the hit counter
 type Counter struct {
-	// persistence is to load and dump the counter window to a csv file
-	persistence persistence.Persistence
-	mu          sync.Mutex
-	// store the request window in the past 60 seconds
+	windowSize int64
+	mu         *sync.Mutex
+	// store the request window in the past windowSize seconds
 	window     []models.Entry
 	hitCounter int64
 }
 
 // NewCounterService load data from csv file to window and returns a new counter service
-func NewCounterService(persistence persistence.Persistence) (*Counter, error) {
-	entries, totalHits, err := persistence.Load()
-	if err != nil {
-		return nil, err
-	}
-	// discard entries if last entry is before 60 seconds
+func NewCounterService(windowSize int, entries []models.Entry) *Counter {
+	// discard entries if last entry is before windowSize seconds
 	now := time.Now().Unix()
+	var totalHits int64 = 0
 	entriesLength := len(entries)
-	if entriesLength > 0 && entries[entriesLength-1].EpochTimestamp < now-60 {
+	if entriesLength > 0 && entries[entriesLength-1].EpochTimestamp < now-int64(windowSize) {
 		entries = []models.Entry{}
-		totalHits = 0
-	}
-	return &Counter{
-		persistence: persistence,
-		mu:          sync.Mutex{},
-		window:      entries,
-		hitCounter:  totalHits,
-	}, nil
-}
-
-// Hit handles the counter and returns the total number of hits received in the past 60 seconds
-func (c *Counter) Hit() int64 {
-	now := time.Now().Unix()
-	sixtySecondsAgo := now - 60
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	var diff int64
-	windowLength := len(c.window)
-	discardCount := 0
-	for i := 0; i < windowLength; i++ {
-		if c.window[i].EpochTimestamp < sixtySecondsAgo {
-			discardCount++
-			diff -= c.window[i].Hits
+	} else {
+		for _, entry := range entries {
+			totalHits += entry.Hits
 		}
 	}
+	// default value setting
+	if windowSize == 0 {
+		windowSize = 60
+	}
+	return &Counter{
+		windowSize: int64(windowSize),
+		mu:         &sync.Mutex{},
+		window:     entries,
+		hitCounter: totalHits,
+	}
+}
+
+// Hit handles the counter and returns the total number of hits received in the past windowSize seconds
+func (c *Counter) Hit() int64 {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	now := time.Now().Unix()
+	c.discard(now)
+	windowLength := len(c.window)
 	if windowLength > 0 && c.window[windowLength-1].EpochTimestamp == now {
 		c.window[windowLength-1].Hits += 1
 	} else {
-		c.window = append(c.window[discardCount:windowLength], models.Entry{EpochTimestamp: now, Hits: 1})
+		c.window = append(c.window, models.Entry{EpochTimestamp: now, Hits: 1})
 	}
-	diff++
-	c.hitCounter = c.hitCounter + diff
+	c.hitCounter = c.hitCounter + 1
 	return c.hitCounter
 }
 
-// Dump dump the window to persistence
-func (c *Counter) Dump() error {
-	return c.persistence.Dump(c.window)
+func (c *Counter) Count() int64 {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	now := time.Now().Unix()
+	c.discard(now)
+	return c.hitCounter
+}
+
+func (c *Counter) Window() []models.Entry {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	now := time.Now().Unix()
+	c.discard(now)
+	return c.window
+}
+
+func (c *Counter) discard(now int64) {
+	windowLength := len(c.window)
+	windowStart := now - c.windowSize
+	var diff int64
+	discardCount := 0
+	for i := 0; i < windowLength; i++ {
+		if c.window[i].EpochTimestamp < windowStart {
+			discardCount++
+			diff += c.window[i].Hits
+		}
+	}
+	c.window = c.window[discardCount:windowLength]
+	c.hitCounter = c.hitCounter - diff
 }

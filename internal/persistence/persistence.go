@@ -5,6 +5,6 @@ import "request-window-counter/internal/models"
 
 // Persistence persists the entries, it also can load entries from persistence
 type Persistence interface {
-	Dump(entries []models.Entry) error
-	Load() ([]models.Entry, int64, error)
+	Dump(counters map[string][]models.Entry) error
+	Load() (map[string][]models.Entry, error)
 }

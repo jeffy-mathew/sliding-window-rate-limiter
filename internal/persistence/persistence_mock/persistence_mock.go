@@ -35,27 +35,26 @@ func (m *MockPersistence) EXPECT() *MockPersistenceMockRecorder {
 }
 
 // Dump mocks base method.
-func (m *MockPersistence) Dump(entries []models.Entry) error {
+func (m *MockPersistence) Dump(counters map[string][]models.Entry) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Dump", entries)
+	ret := m.ctrl.Call(m, "Dump", counters)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Dump indicates an expected call of Dump.
-func (mr *MockPersistenceMockRecorder) Dump(entries interface{}) *gomock.Call {
+func (mr *MockPersistenceMockRecorder) Dump(counters interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Dump", reflect.TypeOf((*MockPersistence)(nil).Dump), entries)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Dump", reflect.TypeOf((*MockPersistence)(nil).Dump), counters)
 }
 
 // Load mocks base method.
-func (m *MockPersistence) Load() ([]models.Entry, int64, error) {
+func (m *MockPersistence) Load() (map[string][]models.Entry, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Load")
-	ret0, _ := ret[0].([]models.Entry)
-	ret1, _ := ret[1].(int64)
-	ret2, _ := ret[2].(error)
-	return ret0, ret1, ret2
+	ret0, _ := ret[0].(map[string][]models.Entry)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Load indicates an expected call of Load.
