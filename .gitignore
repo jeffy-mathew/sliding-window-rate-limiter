@@ -1,6 +1,6 @@
 .idea/
 .DS_Store
 dump.csv
-./testdata/dump-4.csv
 request-window-counter
 dump.json
+testdata/dump-3.json

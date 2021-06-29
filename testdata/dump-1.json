@@ -1,0 +1,175 @@
+{
+  "10.0.0.1": [
+    {
+      "epoch_timestamp": 1624974458,
+      "hits": 10
+    },
+    {
+      "epoch_timestamp": 1624974459,
+      "hits": 5
+    }
+  ],
+  "10.0.0.2": [
+    {
+      "epoch_timestamp": 1624974460,
+      "hits": 10
+    },
+    {
+      "epoch_timestamp": 1624974461,
+      "hits": 5
+    }
+  ],
+  "10.0.0.3": [
+    {
+      "epoch_timestamp": 1624974462,
+      "hits": 8
+    },
+    {
+      "epoch_timestamp": 1624974463,
+      "hits": 7
+    }
+  ],
+  "10.0.0.4": [
+    {
+      "epoch_timestamp": 1624974464,
+      "hits": 9
+    },
+    {
+      "epoch_timestamp": 1624974465,
+      "hits": 6
+    }
+  ],
+  "GLOBAL": [
+    {
+      "epoch_timestamp": 1624974437,
+      "hits": 10
+    },
+    {
+      "epoch_timestamp": 1624974438,
+      "hits": 10
+    },
+    {
+      "epoch_timestamp": 1624974439,
+      "hits": 20
+    },
+    {
+      "epoch_timestamp": 1624974440,
+      "hits": 20
+    },
+    {
+      "epoch_timestamp": 1624974441,
+      "hits": 28
+    },
+    {
+      "epoch_timestamp": 1624974442,
+      "hits": 30
+    },
+    {
+      "epoch_timestamp": 1624974443,
+      "hits": 39
+    },
+    {
+      "epoch_timestamp": 1624974444,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974445,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974446,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974447,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974448,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974449,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974450,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974451,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974452,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974453,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974454,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974455,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974456,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974457,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974458,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974459,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974460,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974461,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974462,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974463,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974464,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974465,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974466,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974467,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974468,
+      "hits": 40
+    },
+    {
+      "epoch_timestamp": 1624974469,
+      "hits": 35
+    }
+  ]
