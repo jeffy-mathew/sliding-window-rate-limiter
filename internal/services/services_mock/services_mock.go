@@ -6,6 +6,7 @@ package services_mock
 
 import (
 	reflect "reflect"
+	models "request-window-counter/internal/models"
 
 	gomock "github.com/golang/mock/gomock"
 )
@@ -33,18 +34,18 @@ func (m *MockCounterServiceInterface) EXPECT() *MockCounterServiceInterfaceMockR
 	return m.recorder
 }
 
-// Dump mocks base method.
-func (m *MockCounterServiceInterface) Dump() error {
+// Count mocks base method.
+func (m *MockCounterServiceInterface) Count() int64 {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Dump")
-	ret0, _ := ret[0].(error)
+	ret := m.ctrl.Call(m, "Count")
+	ret0, _ := ret[0].(int64)
 	return ret0
 }
 
-// Dump indicates an expected call of Dump.
-func (mr *MockCounterServiceInterfaceMockRecorder) Dump() *gomock.Call {
+// Count indicates an expected call of Count.
+func (mr *MockCounterServiceInterfaceMockRecorder) Count() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Dump", reflect.TypeOf((*MockCounterServiceInterface)(nil).Dump))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Count", reflect.TypeOf((*MockCounterServiceInterface)(nil).Count))
 }
 
 // Hit mocks base method.
@@ -59,4 +60,71 @@ func (m *MockCounterServiceInterface) Hit() int64 {
 func (mr *MockCounterServiceInterfaceMockRecorder) Hit() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Hit", reflect.TypeOf((*MockCounterServiceInterface)(nil).Hit))
+}
+
+// Window mocks base method.
+func (m *MockCounterServiceInterface) Window() []models.Entry {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Window")
+	ret0, _ := ret[0].([]models.Entry)
+	return ret0
+}
+
+// Window indicates an expected call of Window.
+func (mr *MockCounterServiceInterfaceMockRecorder) Window() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Window", reflect.TypeOf((*MockCounterServiceInterface)(nil).Window))
+}
+
+// MockRateLimiterInterface is a mock of RateLimiterInterface interface.
+type MockRateLimiterInterface struct {
+	ctrl     *gomock.Controller
+	recorder *MockRateLimiterInterfaceMockRecorder
+}
+
+// MockRateLimiterInterfaceMockRecorder is the mock recorder for MockRateLimiterInterface.
+type MockRateLimiterInterfaceMockRecorder struct {
+	mock *MockRateLimiterInterface
+}
+
+// NewMockRateLimiterInterface creates a new mock instance.
+func NewMockRateLimiterInterface(ctrl *gomock.Controller) *MockRateLimiterInterface {
+	mock := &MockRateLimiterInterface{ctrl: ctrl}
+	mock.recorder = &MockRateLimiterInterfaceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockRateLimiterInterface) EXPECT() *MockRateLimiterInterfaceMockRecorder {
+	return m.recorder
+}
+
+// Dump mocks base method.
+func (m *MockRateLimiterInterface) Dump() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Dump")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Dump indicates an expected call of Dump.
+func (mr *MockRateLimiterInterfaceMockRecorder) Dump() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Dump", reflect.TypeOf((*MockRateLimiterInterface)(nil).Dump))
+}
+
+// Hit mocks base method.
+func (m *MockRateLimiterInterface) Hit(ipAddr string) (int64, int64, bool) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Hit", ipAddr)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(int64)
+	ret2, _ := ret[2].(bool)
+	return ret0, ret1, ret2
+}
+
+// Hit indicates an expected call of Hit.
+func (mr *MockRateLimiterInterfaceMockRecorder) Hit(ipAddr interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Hit", reflect.TypeOf((*MockRateLimiterInterface)(nil).Hit), ipAddr)
 }

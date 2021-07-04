@@ -8,8 +8,8 @@ import (
 	"os"
 	"os/signal"
 	"request-window-counter/internal/app"
-	"request-window-counter/internal/persistence/csvpersistence"
-	"request-window-counter/internal/services/counter"
+	"request-window-counter/internal/persistence/jsonpersistence"
+	"request-window-counter/internal/services/ratelimiter"
 	"syscall"
 	"time"
 )
@@ -20,7 +20,7 @@ const (
 )
 
 // serve handles the logic of running  server in a goroutine and waiting for signal to gracefully stop the server
-// on ctx.Done signal a request to shutdown the server is sent, so that no new requests will be served
+// on ctx.Done signal a request to shut down the server is sent, so that no new requests will be served
 // after that the window is dumped to the file
 func serve(ctx context.Context, counterApp *app.App) {
 	mux := http.NewServeMux()
@@ -40,7 +40,7 @@ func serve(ctx context.Context, counterApp *app.App) {
 
 	<-ctx.Done()
 
-	log.Printf("gracefull shutdown request received")
+	log.Printf("graceful shutdown request received")
 
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -61,15 +61,15 @@ func serve(ctx context.Context, counterApp *app.App) {
 // once the os signal is received the cancel func of ctx passed to serve is called
 // notifying it to initiate a graceful shutdown
 func main() {
-	persistence, err := csvpersistence.NewPersistence()
+	persistence, err := jsonpersistence.NewPersistence()
 	if err != nil {
 		log.Fatalf("error while initilizing persistence %s", err.Error())
 	}
-	counterService, err := counter.NewCounterService(persistence)
+	rateLimiterService, err := ratelimiter.NewRateLimiter(60, 20, 15, persistence)
 	if err != nil {
 		log.Fatalf("error while initilizing counter service %s", err.Error())
 	}
-	counterApp := app.NewApp(counterService)
+	counterApp := app.NewApp(rateLimiterService)
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("recovering from panic, dumping window")

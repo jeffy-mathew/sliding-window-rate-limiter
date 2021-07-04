@@ -1,1 +1,14 @@
 GET http://localhost:8000/
+IP_ADDR:10.0.0.1
+
+echo "GET http://localhost:8000/
+IP_ADDR:10.0.0.1" | vegeta attack -duration=60s -rate=10 -output results1.bin
+&&
+echo "GET http://localhost:8000/
+IP_ADDR:10.0.0.2" | vegeta attack -duration=60s -rate=10 -output results2.bin
+&&
+echo "GET http://localhost:8000/
+IP_ADDR:10.0.0.3" | vegeta attack -duration=60s -rate=10 -output results3.bin
+&&
+echo "GET http://localhost:8000/
+IP_ADDR:10.0.0.4" | vegeta attack -duration=60s -rate=10 -output results4.bin

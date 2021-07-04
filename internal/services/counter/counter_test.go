@@ -1,44 +1,25 @@
 package counter
 
 import (
-	"errors"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"request-window-counter/internal/models"
-	"request-window-counter/internal/persistence/persistence_mock"
 	"sync"
 	"testing"
 	"time"
 )
 
 func TestNewCounterService(t *testing.T) {
-	t.Run("should return error if loading persistence returned error", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
-		mockPersistence.EXPECT().Load().Return(nil, int64(0), errors.New("error while loading persistence"))
-		counterService, err := NewCounterService(mockPersistence)
-		assert.Error(t, err)
-		assert.Nil(t, counterService)
-	})
-	t.Run("should return counter service when persistence load is successful", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
-		mockPersistence.EXPECT().Load().Return([]models.Entry{}, int64(0), nil)
-		counterService, err := NewCounterService(mockPersistence)
-		assert.NoError(t, err)
+	t.Run("should return counter service successfully", func(t *testing.T) {
+		counterService := NewCounterService(60, []models.Entry{})
 		assert.NotEmpty(t, counterService)
 	})
-	t.Run("should set window to be empty slice when the latest entry from loaded entry is more than 60s ago", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
+	t.Run("should return counter service with default window size 60", func(t *testing.T) {
+		counterService := NewCounterService(0, []models.Entry{})
+		assert.Equal(t, counterService.windowSize, int64(60))
+	})
+	t.Run("should set window to be empty slice when the latest entry from loaded entry is more than 60s ago -when windowsize is 60", func(t *testing.T) {
 		epochNow := time.Now().Unix()
-		mockEntries := []models.Entry{{EpochTimestamp: epochNow - 70, Hits: int64(50)}}
-		mockPersistence.EXPECT().Load().Return(mockEntries, int64(50), nil)
-		counterService, err := NewCounterService(mockPersistence)
-		assert.NoError(t, err)
+		counterService := NewCounterService(60, []models.Entry{{EpochTimestamp: epochNow - 70, Hits: int64(50)}})
 		assert.Empty(t, counterService.window)
 		assert.Zero(t, counterService.hitCounter)
 	})
@@ -46,40 +27,22 @@ func TestNewCounterService(t *testing.T) {
 
 func TestCounter_Hit(t *testing.T) {
 	t.Run("should include loaded count 50 seconds ago with latest hit", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
 		epochNow := time.Now().Unix()
-		mockEntries := []models.Entry{{EpochTimestamp: epochNow - 50, Hits: int64(50)}}
-		mockPersistence.EXPECT().Load().Return(mockEntries, int64(50), nil)
-		counterService, err := NewCounterService(mockPersistence)
-		assert.NoError(t, err)
+		counterService := NewCounterService(60, []models.Entry{{EpochTimestamp: epochNow - 50, Hits: int64(50)}})
 		newHit := counterService.Hit()
 		var expectedHits int64 = 51
 		assert.Equal(t, expectedHits, newHit)
 	})
 	t.Run("should discard loaded count 60 seconds ago", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
 		epochNow := time.Now().Unix()
-		mockEntries := []models.Entry{{EpochTimestamp: epochNow - 70, Hits: int64(50)}}
-		mockPersistence.EXPECT().Load().Return(mockEntries, int64(50), nil)
-		counterService, err := NewCounterService(mockPersistence)
-		assert.NoError(t, err)
+		counterService := NewCounterService(60, []models.Entry{{EpochTimestamp: epochNow - 70, Hits: int64(50)}})
 		newHit := counterService.Hit()
 		var expectedHits int64 = 1
 		assert.Equal(t, expectedHits, newHit)
 	})
 	t.Run("do concurrent requests and ensure the count is valid", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
 		epochNow := time.Now().Unix()
-		mockEntries := []models.Entry{{EpochTimestamp: epochNow - 30, Hits: int64(50)}}
-		mockPersistence.EXPECT().Load().Return(mockEntries, int64(50), nil)
-		counterService, err := NewCounterService(mockPersistence)
-		assert.NoError(t, err)
+		counterService := NewCounterService(60, []models.Entry{{EpochTimestamp: epochNow - 30, Hits: int64(50)}})
 		wg := sync.WaitGroup{}
 		for i := 0; i < 20; i++ {
 			wg.Add(1)
@@ -91,35 +54,35 @@ func TestCounter_Hit(t *testing.T) {
 			}()
 		}
 		wg.Wait()
-		newHit := counterService.Hit()
-		var expectedHits int64 = 111
-		assert.Equal(t, expectedHits, newHit)
+		count := counterService.Count()
+		var expectedHits int64 = 110
+		assert.Equal(t, expectedHits, count)
 	})
 }
 
-func TestCounter_Dump(t *testing.T) {
-	t.Run("should call persistence dump with empty window", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
-		mockPersistence.EXPECT().Load().Return([]models.Entry{}, int64(0), nil)
-		mockPersistence.EXPECT().Dump([]models.Entry{})
-		counterService, err := NewCounterService(mockPersistence)
-		assert.NoError(t, err)
-		err = counterService.Dump()
-		assert.NoError(t, err)
-	})
-	t.Run("should call persistence dump with loaded entries immediately", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		mockPersistence := persistence_mock.NewMockPersistence(ctrl)
-		defer ctrl.Finish()
-		epochNow := time.Now().Unix()
-		mockEntries := []models.Entry{{EpochTimestamp: epochNow - 50, Hits: int64(50)}}
-		mockPersistence.EXPECT().Load().Return(mockEntries, int64(0), nil)
-		mockPersistence.EXPECT().Dump(mockEntries)
-		counterService, err := NewCounterService(mockPersistence)
-		assert.NoError(t, err)
-		err = counterService.Dump()
-		assert.NoError(t, err)
+func TestCounter_Window(t *testing.T) {
+	t.Run("should discard old entries and return newer entries, reducing hit count", func(t *testing.T) {
+		now := time.Now().Unix()
+		counterService := Counter{
+			windowSize: 20,
+			mu:         &sync.Mutex{},
+			window: []models.Entry{
+				{EpochTimestamp: now - 40, Hits: 20},
+				{EpochTimestamp: now - 35, Hits: 20},
+				{EpochTimestamp: now - 18, Hits: 20},
+				{EpochTimestamp: now - 15, Hits: 20},
+				{EpochTimestamp: now - 10, Hits: 20},
+			},
+			hitCounter: 100,
+		}
+		entries := counterService.Window()
+		expectedEntries := []models.Entry{
+			{EpochTimestamp: now - 18, Hits: 20},
+			{EpochTimestamp: now - 15, Hits: 20},
+			{EpochTimestamp: now - 10, Hits: 20},
+		}
+		expectedHits := int64(60)
+		assert.Equal(t, expectedEntries, entries)
+		assert.Equal(t, expectedHits, counterService.hitCounter)
 	})
 }

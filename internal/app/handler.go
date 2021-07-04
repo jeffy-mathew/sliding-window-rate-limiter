@@ -6,15 +6,17 @@ import (
 	"request-window-counter/internal/services"
 )
 
+const IpAddrKey = "IP_ADDR"
+
 // App handles the hit and dump from high level
 type App struct {
-	counterService services.CounterServiceInterface
+	rateLimiterService services.RateLimiterInterface
 }
 
 // NewApp returns app configured with passed counterService
-func NewApp(counterService services.CounterServiceInterface) *App {
+func NewApp(rateLimiterService services.RateLimiterInterface) *App {
 	return &App{
-		counterService: counterService,
+		rateLimiterService: rateLimiterService,
 	}
 }
 
@@ -25,10 +27,15 @@ func (a *App) Hit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("panic recovered ", err)
 		}
 	}()
-	fmt.Fprintf(w, "%d", a.counterService.Hit())
+	ipAddr := r.Header.Get(IpAddrKey)
+	globalCounter, ipCounter, discardRequest := a.rateLimiterService.Hit(ipAddr)
+	if discardRequest {
+		w.WriteHeader(http.StatusTooManyRequests)
+	}
+	fmt.Fprintf(w, "global counter - %d, IP Counter - %d, rateLimited - %t", globalCounter, ipCounter, discardRequest)
 }
 
 // Dump calls service dump to dump the window
 func (a *App) Dump() error {
-	return a.counterService.Dump()
+	return a.rateLimiterService.Dump()
 }
