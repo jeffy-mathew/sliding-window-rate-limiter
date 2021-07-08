@@ -2,7 +2,7 @@ package counter
 
 import (
 	"github.com/stretchr/testify/assert"
-	"request-window-counter/internal/models"
+	"sliding-window-rate-limiter/internal/models"
 	"sync"
 	"testing"
 	"time"

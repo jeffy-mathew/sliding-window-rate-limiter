@@ -1,6 +1,6 @@
 package services
 
-import "request-window-counter/internal/models"
+import "sliding-window-rate-limiter/internal/models"
 
 //go:generate mockgen -source=services.go -destination=./services_mock/services_mock.go -package=services_mock
 

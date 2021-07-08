@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"request-window-counter/internal/models"
+	"sliding-window-rate-limiter/internal/models"
 )
 
 const (

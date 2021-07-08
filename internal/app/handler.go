@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 	"net/http"
-	"request-window-counter/internal/services"
+	"sliding-window-rate-limiter/internal/services"
 )
 
 const IpAddrKey = "IP_ADDR"

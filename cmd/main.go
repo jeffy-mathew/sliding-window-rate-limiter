@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"request-window-counter/internal/app"
-	"request-window-counter/internal/persistence/jsonpersistence"
-	"request-window-counter/internal/services/ratelimiter"
+	"sliding-window-rate-limiter/internal/app"
+	"sliding-window-rate-limiter/internal/persistence/jsonpersistence"
+	"sliding-window-rate-limiter/internal/services/ratelimiter"
 	"syscall"
 	"time"
 )

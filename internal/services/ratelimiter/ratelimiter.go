@@ -1,10 +1,10 @@
 package ratelimiter
 
 import (
-	"request-window-counter/internal/models"
-	"request-window-counter/internal/persistence"
-	"request-window-counter/internal/services"
-	"request-window-counter/internal/services/counter"
+	"sliding-window-rate-limiter/internal/models"
+	"sliding-window-rate-limiter/internal/persistence"
+	"sliding-window-rate-limiter/internal/services"
+	"sliding-window-rate-limiter/internal/services/counter"
 	"sync"
 )
 

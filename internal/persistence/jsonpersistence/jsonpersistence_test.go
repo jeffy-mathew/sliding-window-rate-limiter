@@ -4,7 +4,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
-	"request-window-counter/internal/models"
+	"sliding-window-rate-limiter/internal/models"
 	"testing"
 )
 

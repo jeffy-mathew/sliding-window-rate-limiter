@@ -7,7 +7,7 @@ test:
 	go test -cover ./...
 
 build:
-	go build -o request-window-counter cmd/main.go
+	go build -o sliding-window-rate-limiter cmd/main.go
 
 run:
-	./request-window-counter
+	./sliding-window-rate-limiter

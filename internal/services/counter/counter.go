@@ -1,7 +1,7 @@
 package counter
 
 import (
-	"request-window-counter/internal/models"
+	"sliding-window-rate-limiter/internal/models"
 	"sync"
 	"time"
 )

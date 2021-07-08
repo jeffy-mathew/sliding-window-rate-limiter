@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"request-window-counter/internal/services/services_mock"
+	"sliding-window-rate-limiter/internal/services/services_mock"
 	"testing"
 )
 

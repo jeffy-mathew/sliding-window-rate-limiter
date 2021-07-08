@@ -1,4 +1,4 @@
-module request-window-counter
+module sliding-window-rate-limiter
 
 go 1.16
 
