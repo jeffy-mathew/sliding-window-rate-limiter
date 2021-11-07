@@ -1,5 +1,5 @@
 # Window rate counter
-
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/jeffy-mathew/sliding-window-rate-limiter/master/docker-compose.yml)
 ## Prerequisites
 1. [Go 1.16](https://golang.org/dl/)
 
