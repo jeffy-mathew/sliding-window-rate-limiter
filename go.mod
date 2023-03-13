@@ -1,4 +1,4 @@
-module sliding-window-rate-limiter
+module github.com/jeffy-mathew/sliding-window-rate-limiter
 
 go 1.16
 

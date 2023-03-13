@@ -5,7 +5,8 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"sliding-window-rate-limiter/internal/models"
+
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/models"
 )
 
 const (
@@ -13,11 +14,12 @@ const (
 	DefaultDumpFileLocation = "./dump.json"
 )
 
-// JSONPersistence persists the entries to a csv file, mentioned in DumpFileEnv location
+// JSONPersistence persists the entries to a json file, mentioned in DumpFileEnv location
 type JSONPersistence struct {
 	file *os.File
 }
 
+// NewPersistence creates and returns a new JSONPersistence store.
 func NewPersistence() (*JSONPersistence, error) {
 	dumpFile := os.Getenv(DumpFileEnv)
 	if dumpFile == "" {

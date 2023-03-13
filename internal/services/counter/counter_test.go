@@ -1,11 +1,12 @@
 package counter
 
 import (
-	"github.com/stretchr/testify/assert"
-	"sliding-window-rate-limiter/internal/models"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/models"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewCounterService(t *testing.T) {

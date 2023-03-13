@@ -2,15 +2,16 @@ package ratelimiter
 
 import (
 	"errors"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
-	"sliding-window-rate-limiter/internal/models"
-	"sliding-window-rate-limiter/internal/persistence/persistence_mock"
-	"sliding-window-rate-limiter/internal/services"
-	"sliding-window-rate-limiter/internal/services/services_mock"
 
-	//"sliding-window-rate-limiter/internal/services"
-	//"sliding-window-rate-limiter/internal/services/services_mock"
+	"github.com/golang/mock/gomock"
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/models"
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/persistence/persistence_mock"
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/services"
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/services/services_mock"
+	"github.com/stretchr/testify/assert"
+
+	//"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/services"
+	//"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/services/services_mock"
 	"sync"
 	"testing"
 	"time"

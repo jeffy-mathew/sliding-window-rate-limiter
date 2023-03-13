@@ -7,11 +7,12 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"sliding-window-rate-limiter/internal/app"
-	"sliding-window-rate-limiter/internal/persistence/jsonpersistence"
-	"sliding-window-rate-limiter/internal/services/ratelimiter"
 	"syscall"
 	"time"
+
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/app"
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/persistence/jsonpersistence"
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/services/ratelimiter"
 )
 
 const (
@@ -63,12 +64,14 @@ func serve(ctx context.Context, counterApp *app.App) {
 func main() {
 	persistence, err := jsonpersistence.NewPersistence()
 	if err != nil {
-		log.Fatalf("error while initilizing persistence %s", err.Error())
+		log.Fatalf("error while initializing persistence %s", err.Error())
 	}
+
 	rateLimiterService, err := ratelimiter.NewRateLimiter(60, 20, 15, persistence)
 	if err != nil {
-		log.Fatalf("error while initilizing counter service %s", err.Error())
+		log.Fatalf("error while initializing counter service %s", err.Error())
 	}
+
 	counterApp := app.NewApp(rateLimiterService)
 	defer func() {
 		if err := recover(); err != nil {
@@ -80,6 +83,7 @@ func main() {
 			log.Println("dumping window complete. app exiting!!")
 		}
 	}()
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 

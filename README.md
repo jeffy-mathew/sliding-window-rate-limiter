@@ -1,5 +1,16 @@
-# Sliding Window rate counter
-<!-- [![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/jeffy-mathew/sliding-window-rate-limiter/master/docker-compose.yml) -->
+# Sliding Window rate Limiter
+
+This is an application implementing a sliding window rate limiter.
+
+For the sake of simplicity it is considered that the source IP address is present as an HTTP request header `IP_ADDR`.
+
+The application maintains a counter for requests on a global level and per IP level, though currently rate limiting is implemented only on IP level.
+
+Global window is hardcoded to 60 and IP rate limit is set to 15 requests per 20 seconds - this could be environment variables to make the application flexible.
+
+It has a persistence storage, so on the event of stopping the application, the current hit rates are persisted to a json file from `DUMP_FILE` environment variable, if it's not set it is defaulted to `./dump.json`. 
+When the application is back up, the hit counter information are reloaded back to memory and the rate limiter can continue working. If the loaded data are too old(i.e. before the window length), the data is discarded.
+
 ## Prerequisites
 1. [Go 1.16](https://golang.org/dl/)
 

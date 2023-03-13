@@ -3,9 +3,11 @@ package app
 import (
 	"fmt"
 	"net/http"
-	"sliding-window-rate-limiter/internal/services"
+
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/services"
 )
 
+// IpAddrKey is the header name in which IP address would be present.
 const IpAddrKey = "IP_ADDR"
 
 // App handles the hit and dump from high level

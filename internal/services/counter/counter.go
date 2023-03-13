@@ -1,9 +1,10 @@
 package counter
 
 import (
-	"sliding-window-rate-limiter/internal/models"
 	"sync"
 	"time"
+
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/models"
 )
 
 // Counter service handles the hit counter
@@ -28,10 +29,12 @@ func NewCounterService(windowSize int, entries []models.Entry) *Counter {
 			totalHits += entry.Hits
 		}
 	}
+
 	// default value setting
 	if windowSize == 0 {
 		windowSize = 60
 	}
+
 	return &Counter{
 		windowSize: int64(windowSize),
 		mu:         &sync.Mutex{},

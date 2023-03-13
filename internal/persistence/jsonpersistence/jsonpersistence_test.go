@@ -1,11 +1,12 @@
 package jsonpersistence
 
 import (
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
-	"sliding-window-rate-limiter/internal/models"
 	"testing"
+
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/models"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewPersistence(t *testing.T) {

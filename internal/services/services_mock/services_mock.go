@@ -6,7 +6,7 @@ package services_mock
 
 import (
 	reflect "reflect"
-	models "sliding-window-rate-limiter/internal/models"
+	models "github.com/jeffy-mathew/sliding-window-rate-limiter/internal/models"
 
 	gomock "github.com/golang/mock/gomock"
 )

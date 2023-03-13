@@ -2,13 +2,14 @@ package app
 
 import (
 	"fmt"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"sliding-window-rate-limiter/internal/services/services_mock"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/jeffy-mathew/sliding-window-rate-limiter/internal/services/services_mock"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestApp_Dump(t *testing.T) {
